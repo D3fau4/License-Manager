@@ -1,29 +1,23 @@
 using System;
-using System.IO;
+using System.Text;
 using UnityEngine;
 
 public class MakePackage1
 {
-
+    private static int pk11magic = 0x31314B50;
     public byte[] Build()
     {
-        byte[] array = new byte[0x4];
-        MemoryStream output = new MemoryStream(array);
-        using (BinaryWriter binaryWriter = new BinaryWriter(output))
-        {
-            binaryWriter.Write(MakePK11header());
-            Debug.Log("Total Package1 size: " + array.Length);
-            return array;
-        }
+        Byte_Holder pk11 = new Byte_Holder(0x1024);
+        pk11.Write(MakePK11header());
+        return pk11.DumpToArray();
     }
 
     private byte[] MakePK11header()
     {
-        byte[] array = new byte[0x4];
-        MemoryStream output = new MemoryStream(array);
-        BinaryWriter binaryWriter = new BinaryWriter(output);
-        binaryWriter.Write(0x31314B50);
-        return array;
+        Byte_Holder tmp = new Byte_Holder(0x100);
+        tmp.Write(pk11magic);
+        tmp.Write(SystemInfo.operatingSystem);
+        return tmp.DumpToArray();
     }
 
     public static string GetTimestamp(DateTime value)

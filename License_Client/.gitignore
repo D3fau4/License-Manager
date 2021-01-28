@@ -21,6 +21,13 @@
 
 # Visual Studio cache directory
 .vs/
+.vscode/
+
+# Unity for Switch cache directorys
+SwitchIL2CPPCache/
+SwitchIL2CPPStats/
+# wrapper folder
+hacbrewpack_backup/
 
 # Gradle cache directory
 .gradle/
@@ -52,9 +59,13 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
+*.nsp
 *.apk
 *.unitypackage
 
 # Crashlytics generated file
 crashlytics-build.properties
-
+*/Temp/
+*/Library/
+*/obj/
+*.log
