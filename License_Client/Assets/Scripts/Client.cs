@@ -18,7 +18,7 @@ public class Client : MonoBehaviour
         Cliente.Connect(IP, Port);
         try
         {
-            pk11 = package1.Build();
+            pk11 = package1.Build("123", true, true);
             int meme = Cliente.Send(pk11);
             Debug.Log(meme);
             Debug.Log("Conectado");
