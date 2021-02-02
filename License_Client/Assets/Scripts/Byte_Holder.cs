@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 public class Byte_Holder
 {
-    public List<Byte> bytes;
+    public List<byte> bytes;
     private long remainingLength;
 
     public Byte_Holder() { }
@@ -19,7 +19,9 @@ public class Byte_Holder
     public void Pad(long padamount)
     {
         for (int i = 0; i < padamount; i++)
+        {
             bytes.Add(0);
+        }
 
         remainingLength -= padamount;
     }

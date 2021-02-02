@@ -1,8 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.IO;
 
 namespace License_Server
 {
@@ -36,30 +36,36 @@ namespace License_Server
                     if (Encoding.ASCII.GetString(Header) == "PK11")
                     {
                         Console.WriteLine("Cabecera correcta");
-                        Int32 IsCripted, Gen, size;
+                        int IsCripted, Gen, size;
                         IsCripted = Reader.ReadInt32();
                         Gen = Reader.ReadInt32();
                         size = Reader.ReadInt32();
-                        Console.WriteLine("Size: " + size);
                         Console.WriteLine("Generar: " + Gen);
                         Console.WriteLine("IsCripted: " + IsCripted);
+                        Console.WriteLine("Size: " + size);
                         // Comprobar si es encriptado o no, en caso de que si desencriptar
                         if (IsCripted == 0x1)
                         {
-                            Console.WriteLine(Encoding.ASCII.GetString(bytes));
+                            Console.WriteLine("Mensaje encriptado: " + Encoding.ASCII.GetString(bytes));
                             byte[] dec = Decriptor.DecryptMessage(Reader.ReadBytes(size));
-                            Console.WriteLine(Encoding.ASCII.GetString(dec));
+                            Console.WriteLine("Mensaje desencriptado: " + Encoding.ASCII.GetString(dec));
                             MemoryStream outputdec = new MemoryStream(dec);
                             BinaryReader Readerdec = new BinaryReader(outputdec);
-                            var timestamp = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x8));
+                            string timestamp = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x8));
                             if (timestamp == GetTimestamp(DateTime.Now))
                             {
-                                Console.WriteLine("TimeStamp correcto");
+                                Console.WriteLine("TimeStamp correcto: " + Encoding.ASCII.GetString(timestamp));
                             }
-                        } else
+                        }
+                        else
                         {
-
                             Console.WriteLine(Encoding.ASCII.GetString(bytes));
+                            byte[] timestamp = new byte[0x8];
+                            Reader.Read(timestamp, 0, timestamp.Length);
+                            if (Encoding.ASCII.GetString(timestamp) == GetTimestamp(DateTime.Now))
+                            {
+                                Console.WriteLine("TimeStamp correcto: " + Encoding.ASCII.GetString(timestamp));
+                            }
                         }
                     }
                     else

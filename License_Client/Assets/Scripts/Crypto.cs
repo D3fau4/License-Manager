@@ -6,7 +6,7 @@ public class Crypto
 {
     public byte[] Encrypt(byte[] data, byte[] key, byte[] iv)
     {
-        using (var aes = Aes.Create())
+        using (Aes aes = Aes.Create())
         {
             aes.KeySize = 128;
             aes.BlockSize = 128;
@@ -15,7 +15,7 @@ public class Crypto
             aes.Key = key;
             aes.IV = iv;
 
-            using (var encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
+            using (ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV))
             {
                 return PerformCryptography(data, encryptor);
             }
@@ -24,7 +24,7 @@ public class Crypto
 
     public byte[] Decrypt(byte[] data, byte[] key, byte[] iv)
     {
-        using (var aes = Aes.Create())
+        using (Aes aes = Aes.Create())
         {
             aes.KeySize = 128;
             aes.BlockSize = 128;
@@ -33,7 +33,7 @@ public class Crypto
             aes.Key = key;
             aes.IV = iv;
 
-            using (var decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
+            using (ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV))
             {
                 return PerformCryptography(data, decryptor);
             }
@@ -42,8 +42,8 @@ public class Crypto
 
     private byte[] PerformCryptography(byte[] data, ICryptoTransform cryptoTransform)
     {
-        using (var ms = new MemoryStream())
-        using (var cryptoStream = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
+        using (MemoryStream ms = new MemoryStream())
+        using (CryptoStream cryptoStream = new CryptoStream(ms, cryptoTransform, CryptoStreamMode.Write))
         {
             cryptoStream.Write(data, 0, data.Length);
             cryptoStream.FlushFinalBlock();

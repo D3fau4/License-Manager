@@ -1,13 +1,17 @@
 using System.Net.Sockets;
-using System.Text;
 using UnityEngine;
 
 public class Client : MonoBehaviour
 {
     private readonly byte[] message;
     private readonly MakePackage1 package1 = new MakePackage1();
-    public string IP;
-    public int Port;
+    [SerializeField]
+    private string IP;
+    [SerializeField]
+    private int Port;
+    [SerializeField]
+    private bool Encrypt = true;
+    private bool Generate = true;
     private byte[] pk11;
 
     // Start is called before the first frame update
@@ -18,9 +22,9 @@ public class Client : MonoBehaviour
         Cliente.Connect(IP, Port);
         try
         {
-            pk11 = package1.Build("123", true, true);
+            Debug.Log("Contruyendo Package1");
+            pk11 = package1.Build("123", Encrypt, Generate);
             int meme = Cliente.Send(pk11);
-            Debug.Log(meme);
             Debug.Log("Conectado");
         }
         catch (System.Exception)
