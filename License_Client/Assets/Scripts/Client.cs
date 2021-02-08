@@ -11,6 +11,8 @@ public class Client : MonoBehaviour
     private int Port;
     [SerializeField]
     private bool Encrypt = true;
+    [SerializeField]
+    private GameObject DeviceID;
     private bool Generate = true;
     private byte[] pk11;
 
@@ -38,6 +40,6 @@ public class Client : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
+        DeviceID.GetComponent<UnityEngine.UI.Text>().text = SystemInfo.deviceUniqueIdentifier;
     }
 }

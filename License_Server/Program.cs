@@ -54,7 +54,7 @@ namespace License_Server
                             string timestamp = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x8));
                             if (timestamp == GetTimestamp(DateTime.Now))
                             {
-                                Console.WriteLine("TimeStamp correcto: " + Encoding.ASCII.GetString(timestamp));
+                                Console.WriteLine("TimeStamp correcto: " + timestamp);
                             }
                         }
                         else
