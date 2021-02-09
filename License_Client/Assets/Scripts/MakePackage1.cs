@@ -9,7 +9,7 @@ public class MakePackage1
     {
         KeyGen meme = new KeyGen();
         Byte_Holder pk11 = new Byte_Holder(0x1024);
-        pk11.Write(MakePK11header(enc, gen));
+        pk11.Write(MakePK11header(enc, gen, id.Length));
         if (enc)
         {
             pk11.Write(meme.EncryptMessage(MakeBody(0xff, id)));
@@ -22,7 +22,7 @@ public class MakePackage1
         return pk11.DumpToArray();
     }
 
-    private byte[] MakePK11header(bool enc, bool gen)
+    private byte[] MakePK11header(bool enc, bool gen, int sizebody)
     {
         Debug.Log("Contruyendo Header");
         Byte_Holder tmp = new Byte_Holder(0x6);
@@ -47,8 +47,8 @@ public class MakePackage1
             Debug.Log("No Generar");
             tmp.Write(0x0); // Verificar
         }
-        Debug.Log("Tamaño del cuerpo: " + 0xff);
-        tmp.Write(0xff);
+        Debug.Log("Tamaño del cuerpo: " + sizebody + 8);
+        tmp.Write(sizebody + 8);
         return tmp.DumpToArray();
     }
 
@@ -60,7 +60,7 @@ public class MakePackage1
         return tmp.DumpToArray();
     }
 
-    public static string GetTimestamp(DateTime value)
+    public string GetTimestamp(DateTime value)
     {
         return value.ToString("yyyyMMdd");
     }

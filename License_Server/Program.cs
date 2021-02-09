@@ -10,6 +10,7 @@ namespace License_Server
     {
         private static void Main(string[] args)
         {
+
             KeyGen Decriptor = new KeyGen();
             TcpListener server = new TcpListener(IPAddress.Parse("0.0.0.0"), 6969);
 
@@ -47,7 +48,7 @@ namespace License_Server
                         if (IsCripted == 0x1)
                         {
                             Console.WriteLine("Mensaje encriptado: " + Encoding.ASCII.GetString(bytes));
-                            byte[] dec = Decriptor.DecryptMessage(Reader.ReadBytes(size));
+                            byte[] dec = Decriptor.DecryptMessage(Reader.ReadBytes(0xff));
                             Console.WriteLine("Mensaje desencriptado: " + Encoding.ASCII.GetString(dec));
                             MemoryStream outputdec = new MemoryStream(dec);
                             BinaryReader Readerdec = new BinaryReader(outputdec);
@@ -55,16 +56,82 @@ namespace License_Server
                             if (timestamp == GetTimestamp(DateTime.Now))
                             {
                                 Console.WriteLine("TimeStamp correcto: " + timestamp);
+                                if (Gen == 0x1)
+                                {
+                                    string messageDevice = Encoding.ASCII.GetString(Readerdec.ReadBytes(size));
+                                    Console.WriteLine("Device ID: " + messageDevice);
+                                    Console.WriteLine(Decriptor.GenerateKey(messageDevice));
+                                    NetworkStream nwStream = client.GetStream();
+                                    byte[] buffer = new byte[client.ReceiveBufferSize];
+                                    MakePackage1 packagebuilder = new MakePackage1();
+                                    buffer = packagebuilder.Build(Decriptor.GenerateKey(messageDevice), true, true);
+                                    nwStream.Write(buffer);
+                                    //client.Close();
+                                    break;
+                                } else if (Gen == 0x0)
+                                {
+                                    string Key = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x19));
+                                    size = size - 8;
+                                    string DeviceID = Encoding.ASCII.GetString(Readerdec.ReadBytes(size));
+                                    Console.WriteLine("Key: " + Key + "\nDeviceID: " + DeviceID);
+                                    DeviceID = DeviceID.Replace("\0", "");
+                                    if (Decriptor.verifyKey(Key, DeviceID) == true)
+                                    {
+                                        NetworkStream nwStream = client.GetStream();
+                                        byte[] buffer = new byte[client.ReceiveBufferSize];
+                                        MakePackage1 packagebuilder = new MakePackage1();
+                                        buffer = packagebuilder.Build("OK",true,false);
+                                        nwStream.Write(buffer);
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            Console.WriteLine(Encoding.ASCII.GetString(bytes));
-                            byte[] timestamp = new byte[0x8];
-                            Reader.Read(timestamp, 0, timestamp.Length);
-                            if (Encoding.ASCII.GetString(timestamp) == GetTimestamp(DateTime.Now))
+                            Console.WriteLine("Mensaje desencriptado: " + Encoding.ASCII.GetString(bytes));
+                            byte[] dec = Reader.ReadBytes(0xff);
+                            MemoryStream outputdec = new MemoryStream(dec);
+                            BinaryReader Readerdec = new BinaryReader(outputdec);
+                            string timestamp = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x8));
+                            if (timestamp == GetTimestamp(DateTime.Now))
                             {
-                                Console.WriteLine("TimeStamp correcto: " + Encoding.ASCII.GetString(timestamp));
+                                Console.WriteLine("TimeStamp correcto: " + timestamp);
+                                if (Gen == 0x1)
+                                {
+                                    string messageDevice = Encoding.ASCII.GetString(Readerdec.ReadBytes(size));
+                                    Console.WriteLine("Device ID: " + messageDevice);
+                                    Console.WriteLine(Decriptor.GenerateKey(messageDevice));
+                                    NetworkStream nwStream = client.GetStream();
+                                    byte[] buffer = new byte[client.ReceiveBufferSize];
+                                    MakePackage1 packagebuilder = new MakePackage1();
+                                    buffer = packagebuilder.Build(Decriptor.GenerateKey(messageDevice), true, true);
+                                    nwStream.Write(buffer);
+                                    //client.Close();
+                                    break;
+                                }
+                                else if (Gen == 0x0)
+                                {
+                                    string Key = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x19));
+                                    size = size - 8;
+                                    string DeviceID = Encoding.ASCII.GetString(Readerdec.ReadBytes(size));
+                                    Console.WriteLine("Key: " + Key + "\nDeviceID: " + DeviceID);
+                                    DeviceID = DeviceID.Replace("\0", "");
+                                    if (Decriptor.verifyKey(Key, DeviceID) == true)
+                                    {
+                                        NetworkStream nwStream = client.GetStream();
+                                        byte[] buffer = new byte[client.ReceiveBufferSize];
+                                        MakePackage1 packagebuilder = new MakePackage1();
+                                        buffer = packagebuilder.Build("OK", true, false);
+                                        nwStream.Write(buffer);
+                                    } else
+                                    {
+                                        NetworkStream nwStream = client.GetStream();
+                                        byte[] buffer = new byte[client.ReceiveBufferSize];
+                                        MakePackage1 packagebuilder = new MakePackage1();
+                                        buffer = packagebuilder.Build("ERROR", true, false);
+                                        nwStream.Write(buffer);
+                                    }
+                                }
                             }
                         }
                     }
