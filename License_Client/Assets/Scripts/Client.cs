@@ -1,33 +1,32 @@
-using System.Net.Sockets;
-using UnityEngine;
 using System;
 using System.IO;
+using System.Net.Sockets;
 using System.Text;
+using UnityEngine;
 
 public class Client : MonoBehaviour
 {
     private readonly byte[] message;
-    private MakePackage1 package1 = new MakePackage1();
+    private readonly MakePackage1 package1 = new MakePackage1();
     [SerializeField]
-    private string IP;
+    private readonly string IP;
     [SerializeField]
-    private int Port;
+    private readonly int Port;
     [SerializeField]
-    private bool Encrypt = true;
+    private readonly bool Encrypt = true;
     [SerializeField]
-    private GameObject DeviceID;
+    private readonly GameObject DeviceID;
     [SerializeField]
-    private GameObject License;
+    private readonly GameObject License;
     [SerializeField]
-    private UnityEngine.UI.Button GenButton;
+    private readonly UnityEngine.UI.Button GenButton;
     [SerializeField]
-    private UnityEngine.UI.Button VerButton;
+    private readonly UnityEngine.UI.Button VerButton;
     [SerializeField]
-    private GameObject licenseTextBox;
-    private bool Generate = true;
+    private readonly GameObject licenseTextBox;
     private byte[] pk11;
-    private Socket Cliente = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-    private KeyGen Decriptor = new KeyGen();
+    private readonly Socket Cliente = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+    private readonly KeyGen Decriptor = new KeyGen();
     private string key;
 
     // Start is called before the first frame update

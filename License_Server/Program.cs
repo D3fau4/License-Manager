@@ -68,7 +68,8 @@ namespace License_Server
                                     nwStream.Write(buffer);
                                     //client.Close();
                                     break;
-                                } else if (Gen == 0x0)
+                                }
+                                else if (Gen == 0x0)
                                 {
                                     string Key = Encoding.ASCII.GetString(Readerdec.ReadBytes(0x19));
                                     size = size - 8;
@@ -80,7 +81,7 @@ namespace License_Server
                                         NetworkStream nwStream = client.GetStream();
                                         byte[] buffer = new byte[client.ReceiveBufferSize];
                                         MakePackage1 packagebuilder = new MakePackage1();
-                                        buffer = packagebuilder.Build("OK",true,false);
+                                        buffer = packagebuilder.Build("OK", true, false);
                                         nwStream.Write(buffer);
                                     }
                                 }
@@ -123,7 +124,8 @@ namespace License_Server
                                         MakePackage1 packagebuilder = new MakePackage1();
                                         buffer = packagebuilder.Build("OK", true, false);
                                         nwStream.Write(buffer);
-                                    } else
+                                    }
+                                    else
                                     {
                                         NetworkStream nwStream = client.GetStream();
                                         byte[] buffer = new byte[client.ReceiveBufferSize];
