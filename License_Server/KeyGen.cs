@@ -5,14 +5,14 @@ namespace License_Server
     {
         // Message Crypto Meme
         private readonly byte[] key = { 0x6A, 0x5D, 0x16, 0x8B, 0x14, 0xE6, 0x4C, 0xAD, 0xD7, 0x0D, 0xA9, 0x34, 0xA0, 0x6C, 0xC2, 0x22 };
-        private readonly byte[] iv = { 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69 };
+        private readonly byte[] iv  = { 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69, 0x69 };
         private readonly Crypto MemeCripto = new Crypto();
         // Keygen
         private readonly string cryptoVocabulary = "jtwIHWJRuzG2oBSsmaQ73Dx6eArPk5LE8VbfnqvhdU9KXYFTgpy4ZMNcC";
         //privateKey es una cadena de numeros random que tambien se puede considerar como una clave privada del server.
-        private readonly int[] privateKey = {
-            48, 66, 8, 62, 85, 74, 12, 67, 1, 94, 85, 44, 81, 66, 84, 64, 84, 61, 80, 63, 81, 88,
-            7, 7, 11, 2, 70, 47, 70, 75, 21, 97, 79, 55, 45, 82, 8, 9, 72, 17, 26, 17, 71, 53, 48,
+        private readonly int[] privateKey = { 
+            48, 66, 8, 62, 85, 74, 12, 67, 1, 94, 85, 44, 81, 66, 84, 64, 84, 61, 80, 63, 81, 88, 
+            7, 7, 11, 2, 70, 47, 70, 75, 21, 97, 79, 55, 45, 82, 8, 9, 72, 17, 26, 17, 71, 53, 48, 
             11, 72, 47, 97, 92, 67, 52, 3, 48, 0, 31, 54 };
 
         // Aqui el vocabulario hexadecimal y sus valores, que la id de la gpu los emplea y no vas a calcular con F y C.
@@ -70,8 +70,7 @@ namespace License_Server
             {
                 Console.WriteLine("Key Correcta");
                 return true;
-            }
-            else
+            } else
             {
                 Console.WriteLine("Key incorrecta");
                 return false;
@@ -80,7 +79,7 @@ namespace License_Server
 
         public string GenerateKey(string DeviceID)
         {
-
+            
             int suma = 69;
             for (int i = 0; i < DeviceID.Length; i++)
             {
@@ -89,7 +88,7 @@ namespace License_Server
                     suma += hexValues[hexVocabulary.IndexOf(DeviceID.ToCharArray()[i])];
                 }
             }
-
+            
             int digitoEspecial = SumaDigitos(suma);
 
             string licencia = "";

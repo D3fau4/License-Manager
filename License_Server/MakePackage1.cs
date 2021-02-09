@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace License_Server
 {
-    internal class MakePackage1
+    class MakePackage1
     {
         private static readonly int pk11magic = 0x31314B50;
         public byte[] Build(string id, bool enc = false, bool gen = true)
@@ -24,7 +26,7 @@ namespace License_Server
 
         private byte[] MakePK11header(bool enc, bool gen)
         {
-
+           
             Byte_Holder tmp = new Byte_Holder(0x6);
             tmp.Write(pk11magic);
             if (enc)
@@ -43,7 +45,7 @@ namespace License_Server
             {
                 tmp.Write(0x3); // verificado
             }
-
+            
             tmp.Write(0xff);
             return tmp.DumpToArray();
         }
