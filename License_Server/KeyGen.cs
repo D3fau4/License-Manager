@@ -79,9 +79,9 @@ namespace License_Server
 
         public string GenerateKey(string DeviceID)
         {
-            
+            DeviceID = DeviceID.Replace("\0", "");
             int suma = 69;
-            for (int i = 0; i < DeviceID.Length; i++)
+            for (int i = 0; i < DeviceID.ToCharArray().Length; i++)
             {
                 if (i != hexValues[hexVocabulary.IndexOf(DeviceID.ToCharArray()[0])])
                 {

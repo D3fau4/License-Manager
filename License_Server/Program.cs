@@ -82,6 +82,13 @@ namespace License_Server
                                         MakePackage1 packagebuilder = new MakePackage1();
                                         buffer = packagebuilder.Build("OK",true,false);
                                         nwStream.Write(buffer);
+                                    } else
+                                    {
+                                        NetworkStream nwStream = client.GetStream();
+                                        byte[] buffer = new byte[client.ReceiveBufferSize];
+                                        MakePackage1 packagebuilder = new MakePackage1();
+                                        buffer = packagebuilder.Build("ERROR", true, false);
+                                        nwStream.Write(buffer);
                                     }
                                 }
                             }
@@ -123,7 +130,8 @@ namespace License_Server
                                         MakePackage1 packagebuilder = new MakePackage1();
                                         buffer = packagebuilder.Build("OK", true, false);
                                         nwStream.Write(buffer);
-                                    } else
+                                    } 
+                                    else
                                     {
                                         NetworkStream nwStream = client.GetStream();
                                         byte[] buffer = new byte[client.ReceiveBufferSize];
